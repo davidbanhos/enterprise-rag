@@ -1,7 +1,10 @@
 package com.portfolio.ai.enterpriserag;
 
+import com.portfolio.ai.enterpriserag.dto.ChatReponse;
+import com.portfolio.ai.enterpriserag.dto.ChatRequest;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -14,17 +17,11 @@ public class ChatController {
         this.service = service;
     }
 
-    public record ChatRequest(
-        @NotBlank String question
-    ) {}
-
-    public record ChatResponse(String answer) {}
-
     @PostMapping
-    public ChatResponse chat(
+    public ResponseEntity<ChatReponse> chat(
             @Valid @RequestBody ChatRequest request) {
-
         String answer = service.ask(request.question());
-        return new ChatResponse(answer);
+
+        return ResponseEntity.ok(new ChatReponse(answer));
     }
 }

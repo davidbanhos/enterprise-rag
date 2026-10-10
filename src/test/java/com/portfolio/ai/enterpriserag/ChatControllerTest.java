@@ -1,6 +1,9 @@
 package com.portfolio.ai.enterpriserag;
 
+import com.portfolio.ai.enterpriserag.dto.ChatReponse;
+import com.portfolio.ai.enterpriserag.dto.ChatRequest;
 import org.junit.jupiter.api.Test;
+import org.springframework.ai.chat.model.ChatResponse;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
@@ -11,22 +14,26 @@ class ChatControllerTest {
     void shouldReturnAiAnswer() {
         ChatService service = mock(ChatService.class);
 
+
         when(service.ask("What is RAG?"))
-                .thenReturn("RAG combines retrieval and generation.");
+                .thenReturn("Retrieval-Augmented Generation");
 
         ChatController controller =
                 new ChatController(service);
 
-        var request =
-                new ChatController.ChatRequest("What is RAG?");
+        var response = controller.chat(
+                new ChatRequest("What is RAG?"));
 
-        var response = controller.chat(request);
+        assertEquals(200, response.getStatusCode().value());
+
+        ChatReponse body = response.getBody();
+        assertNotNull(body);
 
         assertEquals(
-                "RAG combines retrieval and generation.",
-                response.answer()
-        );
+                "Retrieval-Augmented Generation",
+                body.answer());
 
         verify(service).ask("What is RAG?");
+
     }
 }

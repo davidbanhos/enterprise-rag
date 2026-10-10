@@ -1,26 +1,18 @@
 package com.portfolio.ai.enterpriserag;
 
-import org.springframework.ai.chat.client.ChatClient;
+import com.portfolio.ai.enterpriserag.service.AiModelGateway;
 import org.springframework.stereotype.Service;
 
 @Service
 public class ChatService {
 
-    private final ChatClient chatClient;
+    private final AiModelGateway gateway;
 
-    public ChatService(ChatClient.Builder builder) {
-        this.chatClient = builder.build();
+    public ChatService(AiModelGateway gateway) {
+        this.gateway = gateway;
     }
 
     public String ask(String question) {
-        return chatClient.prompt()
-                .system("""
-                    You are an enterprise AI assistant.
-                    Answer clearly and concisely.
-                    If uncertain, acknowledge uncertainty.
-                    """)
-                .user(question)
-                .call()
-                .content();
+        return gateway.generateAnswer(question);
     }
 }
