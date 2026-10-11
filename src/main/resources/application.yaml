@@ -1,11 +1,23 @@
 spring:
   application:
     name: enterprise-rag
+
+  datasource:
+    url: jdbc:postgresql://localhost:5432/ragdb
+    username: raguser
+    password: ${DB_PASSWORD:localdevpassword}
+
   ai:
     openai:
       api-key: ${OPENAI_API_KEY}
       chat:
         model: text-embedding-3-small
+    vectorstore:
+      pgvector:
+        initialize-schema: true
+        dimensions: 1536
+        distance-type: COSINE_DISTANCE
+        index-type: HNSW
 
 server:
   port: 8080
