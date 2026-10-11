@@ -24,6 +24,6 @@ public class GlobalExceptionHandler {
             Exception ex) {
 
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                .body(Map.of("error", "Unable to process request"));
+                .body(Map.of("error", "Unable to process request: " + ex.getMessage()));
     }
 }
